@@ -49,14 +49,14 @@ void main()
     {
         n = (int)x_values[i];
         pointer = decimal_to_binary(n);
-        fprintf(lab2_x_fixed_point, "%s ", pointer);
+        fprintf(lab2_x_fixed_point, "%s\n", pointer);
     }
 
     for (i = 0; i < N; i++)
     {
         n = (int)y_values[i];
         pointer = decimal_to_binary(n);
-        fprintf(lab2_y_fixed_point, "%s ", pointer);
+        fprintf(lab2_y_fixed_point, "%s\n", pointer);
     }
 
     free(pointer);
