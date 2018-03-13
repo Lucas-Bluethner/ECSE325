@@ -14,12 +14,12 @@ void main()
     float y_values[N];
     int i;
 
-    for (i = 0; i < N; i++) 
+    for (i = 0; i < N; i++)
     {
         fscanf(lab2_x, "%f", &x_values[i]);
     }
 
-    for (i = 0; i < N; i++) 
+    for (i = 0; i < N; i++)
     {
         fscanf(lab2_y, "%f", &y_values[i]);
     }
@@ -30,14 +30,14 @@ void main()
     int W = 10;
     int F = 7;
 
-    for(i = 0; i < N; i++)
+    for (i = 0; i < N; i++)
     {
-        x_values[i] = x_values[i]*128; 
+        x_values[i] = x_values[i] * 128;
     }
 
-    for(i = 0; i < N; i++)
+    for (i = 0; i < N; i++)
     {
-        y_values[i] = y_values[i]*128;
+        y_values[i] = y_values[i] * 128;
     }
 
     FILE *lab2_x_fixed_point = fopen("lab2-x-fixed-point.txt", "w");
@@ -45,18 +45,18 @@ void main()
 
     int n;
     char *pointer;
-    for(i = 0; i < N; i++) 
+    for (i = 0; i < N; i++)
     {
         n = (int)x_values[i];
         pointer = decimal_to_binary(n);
-        fprintf(lab2_x_fixed_point,"%s ", pointer);
+        fprintf(lab2_x_fixed_point, "%s ", pointer);
     }
 
-    for(i = 0; i < N; i++)
+    for (i = 0; i < N; i++)
     {
         n = (int)y_values[i];
         pointer = decimal_to_binary(n);
-        fprintf(lab2_y_fixed_point,"%s ", pointer);
+        fprintf(lab2_y_fixed_point, "%s ", pointer);
     }
 
     free(pointer);
@@ -66,55 +66,90 @@ void main()
 
 char *decimal_to_binary(int n)
 {
-    int c, d, count;
+    int c, d, count, i, invert_spot;
     char *pointer;
+    char *p;
     int neg_number = 0;
- 
+
     count = 0;
-    pointer = (char*)malloc(10+1);
- 
-    if (pointer == NULL)
-      exit(EXIT_FAILURE);
+    pointer = (char *)malloc(10 + 1);
+    //p = (char *)malloc(10 + 1);
+
+    int binary_digits[10];
+
+    if (pointer == NULL || p == NULL)
+        exit(EXIT_FAILURE);
 
     if (n < 0)
     {
-        n = n*(-1);
+        n = n * (-1);
         neg_number = 1;
+    }
+
+    for (c = 9; c >= 0; c--)
+    {
+        d = n >> c;
+
+        if (d & 1)
+            binary_digits[count] = 1;
+        else
+            binary_digits[count] = 0;
+        count++;
     }
 
     if(!neg_number)
     {
-        for (c = 9; c >= 0 ; c--)
+        for(i = 0; i < 10; i++)
         {
-
-            d = n >> c;
-
-            if (d & 1)
-                *(pointer+count) = 1 + '0';
+            if(binary_digits[i] == 0)
+            {
+                *(pointer + i) = 0 + '0';
+            }
             else
-                *(pointer+count) = 0 + '0';
-            count++;
-        
+            {
+                *(pointer + i) = 1 + '0';
+            }
         }
     }
     else
     {
-        for(c = 9; c >=0; c--)
+        for (i = 9; i >= 0; i--)
         {
+            if (binary_digits[i] == 1)
+            {
+                invert_spot = i;
+                break;
+            }
+        }
 
-            d = n >> c;
-
-            if(c == 9) 
-                *(pointer+count) = 1 + '0';
-            else if (d & 1)
-                *(pointer+count) = 1 + '0';
+        for (i = 0; i < 10; i++)
+        {
+            if (i < invert_spot)
+            {
+                if (binary_digits[i] == 0)
+                {
+                    *(pointer + i) = 1 + '0';
+                }
+                else
+                {
+                    *(pointer + i) = 0 + '0';
+                }
+            }
             else
-                *(pointer+count) = 0 + '0';
-            count++;
+            {
+                if (binary_digits[i] == 0)
+                {
+                    *(pointer + i) = 0 + '0';
+                }
+                else
+                {
+                    *(pointer + i) = 1 + '0';
+                }
+            }
         }
     }
 
-    *(pointer+count) = '\0';
-    
+    *(pointer + count) = '\0';
+
     return pointer;
 }
