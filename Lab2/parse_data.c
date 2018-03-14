@@ -4,6 +4,10 @@
 
 char *decimal_to_binary(int);
 
+/*
+ * This method reads the floating point values from to separate files,
+ * convert them to fixed point, and stores them in two new files
+ */
 void main()
 {
     // Open the files
@@ -21,7 +25,6 @@ void main()
     {
         fscanf(lab2_x, "%f", &x_values[i]);
     }
-
     for (i = 0; i < N; i++)
     {
         fscanf(lab2_y, "%f", &y_values[i]);
@@ -38,7 +41,6 @@ void main()
     {
         x_values[i] = x_values[i] * 128;
     }
-
     for (i = 0; i < N; i++)
     {
         y_values[i] = y_values[i] * 128;
@@ -50,6 +52,7 @@ void main()
 
     int n;
     char *pointer;
+
     // iterate through each number, convert it to binary (2's complement) then print it to it's corresponding file
     for (i = 0; i < N; i++)
     {
@@ -70,9 +73,8 @@ void main()
     fclose(lab2_y_fixed_point);
 }
 
-
 /*
- * This method take an integer as an argument an converts it to a 10 bit binary number
+ * This method take an integer as an argument an converts it to a 10-bit binary number
  * If the integer is negative, the number gets convert to its positive binary value,
  * then gets converted again to 2's complement
  * returns a pointer to the MSB of the binary number in memory
@@ -83,7 +85,9 @@ char *decimal_to_binary(int n)
     char *pointer;
     int neg_number = 0;
 
+    // initialzer the counter
     count = 0;
+
     // will point to the MSB (sign bit) of the binary number in memory
     pointer = (char *)malloc(10 + 1);
 
